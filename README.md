@@ -1,6 +1,6 @@
 # ORM Doc
 
-This is simple documentation, illustrating how to use x_orm tool, x_orm API provides the following methods for data manipulations
+This is a simple user documentation, illustrating how to use x_orm tool, x_orm API provides the following methods for data manipulations
 
 1.configure_db(**data):
 
