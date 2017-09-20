@@ -48,12 +48,10 @@ def home():
    if request.method=="POST":
      query=request.form['query']
      splitted_query=query.split('.')
-     command="tb_col=db."+splitted_query[1]+".table__columns__"
-     exec(command)
-     command="tb_name=db."+splitted_query[1]+".table__name__"
-     exec(command)
-     statement="data="+query
-     exec(statement)
+     tb_col=getattr(globals()['db'], splitted_query[1][:len(splitted_query[1])-2])().table__columns__
+     tb_name=getattr(globals()['db'], splitted_query[1][:len(splitted_query[1])-2])().table__name__
+
+     data=eval(query)
      check=""
      if isinstance(data,tuple):
         check='tuple'
@@ -61,8 +59,8 @@ def home():
         check='value'
      elif data==None :
         check='None'
-        command="data=db."+splitted_query[1]+".get()"
-        exec(command)
+        command="db."+splitted_query[1]+".get()"
+        data=eval(command)
      else:
         check=='object'
         val={}
