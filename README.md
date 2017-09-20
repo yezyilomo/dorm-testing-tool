@@ -1,8 +1,8 @@
-# ORM Doc
+# DORM API DOCUMENTATION
 
-This is a simple user documentation, illustrating how to use x_orm tool, x_orm API provides the following methods for data manipulations
+This is a simple user documentation, illustrating how to use dorm tool, dorm API provides the following methods for data manipulations
 
-1.configure_db(**data):
+1.configure(**data):
 
       This is a static method for configuring a database to be used,
 
@@ -10,9 +10,9 @@ This is a simple user documentation, illustrating how to use x_orm tool, x_orm A
 
       db_user, db_password, db_name and db_host, it's called as
 
-      orm.configure_db( db_user='your_value',db_name='your_value',db_host='your_value',db_password='your_value' )
+      db.configure( db_user='your_value',db_name='your_value',db_host='your_value',db_password='your_value' )
 
-      and it has to be called at the beginning of your Flask application
+      and it has to be called at the beginning of config.py file
 
 
 2.get():
@@ -21,7 +21,7 @@ This is a simple user documentation, illustrating how to use x_orm tool, x_orm A
 
       a tuple of objects of records, it takes no arguments and it's called as
 
-      Table('table name').get()
+      db.table_name().get()
 
 
 3.where(*data):
@@ -36,16 +36,16 @@ This is a simple user documentation, illustrating how to use x_orm tool, x_orm A
 
       form a query condition
 
-      eg  Table('Student').where('age', '>', 20)
+      eg  db.table_name().where('age', '>', 20)
 
       and the second form is a single argument which specify a query condition
 
       for instance in the first example we could obtain the same result by using
 
-      Table('Student')where('age > 20')    
+      db.table_name().where('age > 20')    
 
 
-4.create(**data):
+4.insert(**data):
 
       This is a method which is used to insert records into a database, with
 
@@ -55,7 +55,7 @@ This is a simple user documentation, illustrating how to use x_orm tool, x_orm A
 
       into your database, it can be called as
 
-      Table('Student').create(Reg_No='2018-04-003', Name='Yezy Ilomo', Age=22)
+      db.table_name().insert(Reg_No='2018-04-003', Name='Yezy Ilomo', Age=22)
 
 
 5.update(**data):
@@ -64,7 +64,7 @@ This is a simple user documentation, illustrating how to use x_orm tool, x_orm A
 
       as columns and their corresponding values for the record, it's called as
 
-      Table('Student').where('age', '>', 20).update(Category="Adult")
+      db.table_name().where('age', '>', 20).update(Category="Adult")
 
       this will update Category field for all records in Student table where age
 
@@ -72,7 +72,7 @@ This is a simple user documentation, illustrating how to use x_orm tool, x_orm A
 
       You can also update all records regardless of any condition in your table as
 
-      Table('Student').get().update(Category="Adult")
+      db.table_name().get().update(Category="Adult")
 
 
 6.delete():      
@@ -81,15 +81,15 @@ This is a simple user documentation, illustrating how to use x_orm tool, x_orm A
 
       it can be used to delete all records in your table as
 
-      Table('Student').get().delete()
+      db.table_name().get().delete()
 
       and if you want to delete records basing on a specific condition you can
 
       also use it with where() clause as
 
-      Table('Student').where('age', '>', 20).delete()  or as
+      db.table_name().where('age', '>', 20).delete()  or as
 
-      Table('Student').where('age > 20').delete()
+      db.table_name().where('age > 20').delete()
 
 
 7.ensure_one():
@@ -104,15 +104,15 @@ This is a simple user documentation, illustrating how to use x_orm tool, x_orm A
 
       called as
 
-      Table('Student').where('Reg_No = "2015-05-033"').ensure_one()
+      db.table_name().where('Reg_No = "2015-05-033"').ensure_one()
 
       on this object you can access record fields as
 
-      Table('Student').where('Reg_No = "2015-05-033"').ensure_one().Reg_No or
+      db.table_name().where('Reg_No = "2015-05-033"').ensure_one().Reg_No or
 
-      Table('Student').where('Reg_No = "2015-05-033"').ensure_one().name   or
+      db.table_name().where('Reg_No = "2015-05-033"').ensure_one().name   or
 
-      Table('Student').where('Reg_No = "2015-05-033"').ensure_one().Course  etc.
+      db.table_name().where('Reg_No = "2015-05-033"').ensure_one().Course  etc.
 
 8.sql(query):
 
@@ -124,11 +124,11 @@ This is a simple user documentation, illustrating how to use x_orm tool, x_orm A
 
       to be executed, and it's called as
 
-      Table('table_name').sql('your sql statement')
+      db.table_name().sql('your sql statement')
 
-      for example Table('Student').sql('select * from Student where age>18')
+      for example db.table_name().sql('select * from Student where age>18')
 
-      Note sql should involve table passed as a parameter to Table()
+      Note sql should involve table used in db.table_name()
 
 
 # Table attributes
@@ -141,14 +141,14 @@ This is a simple user documentation, illustrating how to use x_orm tool, x_orm A
 
          You can access table__columns__ attribute as
 
-         Table('Student').table__columns__
+         db.table_name().table__columns__
 
 
       2. table__name__  this store table name as a string
 
          You can access it as
 
-         Table('Student').table__columns__
+         db.table_name().table__columns__
 
 
       3. primary__keys__ this store table primary keys and their corresponding data types
@@ -157,7 +157,7 @@ This is a simple user documentation, illustrating how to use x_orm tool, x_orm A
 
          You can access primary__keys__  attribute as
 
-         Table('Student').primary__keys__
+         db.table_name().primary__keys__
 
 # Record attributes
       Record has all attributes that table has(mentioned above), in addition to that
