@@ -42,8 +42,8 @@ def configure(**data):
 
 
 class field(object):
-  """This is a class used to define database fields and their constrains
-  """
+   """This is a class used to define database fields and their constrains
+   """
 
    def __init__(self,**data):
       self.model=""
@@ -251,31 +251,59 @@ class table(object):
       """
 
       st="("
-      for val in data:
-         if "char" in self.table__columns__[val] or "text" in self.table__columns__[val] or "date" in self.table__columns__[val] or "time" in self.table__columns__[val]:
-            st=st+"'"+data[val]+"',"
-         else :
-            st=st+str(data[val])+","
+      if isinstance(data, dict):
+          for val in data:
+             if "char" in self.table__columns__[val] or "text" in self.table__columns__[val] or "date" in self.table__columns__[val] or "time" in self.table__columns__[val]:
+
+                st=st+"'"+data[val]+"',"
+             else :
+                st=st+str(data[val])+","
+      elif isinstance(data, tuple):
+          i=0
+          for val in data:
+             col_type=list(self.table__columns__.values())[i]
+             if "char" in col_type or "text" in col_type or "date" in col_type or "time" in col_type:
+
+                st=st+"'"+val+"',"
+             else :
+                st=st+str(val)+","
+             i=i+1
+
       st=st[:len(st)-1]+")"
       return st
 
-   def insert(self,**data):
+   def insert(self,*values,**data):
       """This is a method which is used to insert records into a database, with
          specified arguments as colums and their corresponding values to insert
          into a database, It generally return a record which has been inserted
          into your database
       """
 
-      command="insert into "+ str(self.table__name__) +" "+self.columns_to_insert(data)+ " values "+self.values_to_insert(data)
+      if len(values)==0 and len(data) > 0:
+         command="insert into "+ str(self.table__name__) +" "+self.columns_to_insert(data)+ " values "+self.values_to_insert(data)
+      elif  len(data)==0 and len(values) == len(self.table__columns__):
+         command="insert into "+ str(self.table__name__) + " values "+self.values_to_insert(values)
+         print(command)
+      else:
+         raise Exception("Invalid arguments to 'insert' function")
+
       conn=mysql.connect()
       cursor=conn.cursor()
       cursor.execute(command)
       conn.commit()
       conn.close()
       cursor.close()
+
       pri_key_with_val=collections.OrderedDict()
-      for prk in self.primary__keys__:
-         pri_key_with_val.update({prk:data[prk]})
+      if len(values)==0 and len(data) > 0:
+           for prk in self.primary__keys__:
+              pri_key_with_val.update({prk:data[prk]})
+
+      else:
+          for prk in self.primary__keys__:
+             position=list(self.table__columns__.keys()).index(prk)
+             pri_key_with_val.update({prk:values[position]})
+
       return self.get_one(pri_key_with_val)
 
 
