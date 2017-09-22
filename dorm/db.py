@@ -372,14 +372,8 @@ class joined_tables(object):
       return { 'records': custom_tuple(get_objects(rec,self)), 'table':self  }
 
     def onwhere(self,on_cond,*data):
-         """This is a method which is used to query and return records from a
-            database as a custom tuple of objects of record, the criteria used
-            to query records is specified as argument(s), This method accept two
-            forms of arguments, the first form is three specified arguments which
-            form a query condition eg  where("age", ">", 20),
-            and the second form is a single argument which specify a query condition
-            eg in the first example we could obtain the same result by using
-            where("age > 20")
+         """This is a method which is used to query and return records from a joined_tables
+            table by specifying on condition and where condition
          """
 
          command=""
