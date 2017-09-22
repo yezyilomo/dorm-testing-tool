@@ -372,10 +372,6 @@ class joined_tables(object):
       return { 'records': custom_tuple(get_objects(rec,self)), 'table':self  }
 
     def onwhere(self,on_cond,*data):
-         """This is a method which is used to query and return records from a joined_tables
-            table by specifying on condition and where condition
-         """
-
          command=""
          if len(data)==3:
             col,expr,val=data[0],data[1],data[2]
