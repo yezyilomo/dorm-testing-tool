@@ -24,8 +24,9 @@ app.jinja_env.globals.update(get_rec_values=get_rec_values)
 
 @app.route('/',methods = ['POST', 'GET'])
 def home():
+   max_data=50
    if request.method=="GET":
-     rand_table=db.table.random_table()
+     rand_table=db.random_table()
      table=getattr(db,rand_table)
      data=table().get()
      tb_col=table().table__columns__
@@ -43,15 +44,26 @@ def home():
         for cl in tb_col:
            val.update({cl:get_rec_values(data,cl)})
         data=val
+     if len(data)>max_data:
+         data=data[:max_data]
      return render_template("home.html",sq=data,cols=tb_col,data=check, table_used=table().table__name__)
 
    if request.method=="POST":
      query=request.form['query']
      splitted_query=query.split('.')
-     tb_col=getattr(globals()['db'], splitted_query[1][:len(splitted_query[1])-2])().table__columns__
-     tb_name=getattr(globals()['db'], splitted_query[1][:len(splitted_query[1])-2])().table__name__
+     data=""
 
-     data=eval(query)
+     if splitted_query[1].startswith( "sql(" )  or  splitted_query[2].startswith( "join(" ) :
+         result=eval(query)
+         tb_col=result['table'].table__columns__
+         tb_name=result['table'].table__name__
+         data=result['records']
+     else:
+        tb_col=getattr(globals()['db'], splitted_query[1][:len(splitted_query[1])-2])().table__columns__
+        tb_name=getattr(globals()['db'], splitted_query[1][:len(splitted_query[1])-2])().table__name__
+        data=eval(query)
+
+
      check=""
      if isinstance(data,tuple):
         check='tuple'
@@ -67,4 +79,7 @@ def home():
         for col in tb_col:
            val.update({col:get_rec_values(data,col)})
         data=val
+
+     if len(data)>max_data:
+         data=data[:max_data]
      return  render_template("home.html",sq=data,qr=query,cols=tb_col, data=check, table_used=tb_name)

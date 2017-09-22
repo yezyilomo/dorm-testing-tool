@@ -51,11 +51,15 @@ This is a simple user documentation, illustrating how to use dorm tool, dorm API
 
       specified arguments as columns and their corresponding values to insert
 
-      into a database, It generally return a record which has been inserted
+      into a database, it also accept values if record insertions involve all
+
+      columns It generally return a record which has been inserted
 
       into your database, it can be called as
 
-      db.table_name().insert(Reg_No='2018-04-003', Name='Yezy Ilomo', Age=22)
+      db.table_name().insert(Reg_No='2018-04-003', Name='Yezy Ilomo', Age=22)  or
+
+      db.table_name().insert(2018-04-003', Yezy Ilomo',22)
 
 
 5.update(**data):
@@ -114,21 +118,52 @@ This is a simple user documentation, illustrating how to use dorm tool, dorm API
 
       db.table_name().where('Reg_No = "2015-05-033"').ensure_one().Course  etc.
 
-8.sql(query):
+8.sql(query, table):
 
       This is a method which allows you to execute normal SQL statements without
 
       abstraction, this is used in case you want to do operation that is not supported
 
-      by the API. This method accept one string argument which is the sql statement
+      by the API. This method accept two arguments which are, the sql statement
 
-      to be executed, and it's called as
+      to be executed and table name involved in a query, and it's called as
 
-      db.table_name().sql('your sql statement')
+      db.sql('your sql statement', 'table_name')
 
-      for example db.table_name().sql('select * from Student where age>18')
+      for example db.sql('select * from Student where age>18', 'Student')
 
-      Note sql should involve table used in db.table_name()
+      Note table_name should be equal to the one in your query statement
+
+9.create():
+
+      This is a method which is used in creating database tables, it's an instance
+
+      method of class which defines a table, all classes which defines tables are
+
+      placed in 'database/raw_db.py' file, for example a class defining a table Student
+
+      might look like
+
+      class Student(db.model):
+
+          reg_No=db.field(type="char(10)",constrain="not null",key="primary")
+
+          full_name=db.field(type="char(30)",constrain="not null")
+
+          age=db.field(type="int")
+
+          course=db.field(type="char(20)", constrain="not null")
+
+          year_of_study=db.field(type="int", constrain="not null")
+
+
+      a corresponding table from above class can be created by instantiating
+
+      an object of Student class and calling a method 'create' in 'run' method as
+
+      def run():
+
+         Student().create()
 
 
 # Table attributes
@@ -160,6 +195,9 @@ This is a simple user documentation, illustrating how to use dorm tool, dorm API
          db.table_name().primary__keys__
 
 # Record attributes
+
       Record has all attributes that table has(mentioned above), in addition to that
+
       Record has data attributes corresponding to each record field name(column name)
+
       these data attributes are used to access record fields from record object      
