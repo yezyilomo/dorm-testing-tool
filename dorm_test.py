@@ -24,7 +24,7 @@ app.jinja_env.globals.update(get_rec_values=get_rec_values)
 
 @app.route('/',methods = ['POST', 'GET'])
 def home():
-   max_data=50
+   max_data=500
    if request.method=="GET":
      rand_table=db.random_table()
      table=getattr(db,rand_table)
