@@ -165,8 +165,28 @@ This is a simple user documentation, illustrating how to use dorm tool, dorm API
 
          Student().create()
 
+10.join(table,join_type):
 
-# Table attributes
+      This is a method which is used in joining database tables with first
+
+      arguments as table to join to, and second argument as join type which
+
+      is inner by default, this method return an object of joined table and
+
+      it's called as
+
+      db.table1_name().join(table2,'your_join_type')
+
+11.onwhere(on_condition, where_condition):
+
+      This is a method which is used to query and return records from a table
+
+      arose as a result of joining two tables, with arguments as 'ON' condition and
+
+      'WHERE' condition, it returns a tuple of objects of record
+
+
+# Table and Joined Table attributes
 
       A table has several attributes which might help in data manipulation which are
 
