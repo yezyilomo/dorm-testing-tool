@@ -29,11 +29,11 @@ def home():
      rand_table=db.random_table()
      table=getattr(db,rand_table)
      data=table().get()
-     tb_col=table().table__columns__
+
      check=""
-     if isinstance(data,tuple):
+     if isinstance(data,db.custom_tuple_write) or isinstance(data,db.custom_tuple_read):
         check='tuple'
-     elif isinstance(data,str) or isinstance(data,int) or isinstance(data,float):
+     elif isinstance(data,str) or isinstance(data,int) or isinstance(data,float) or isinstance(data, tuple):
         check='value'
      elif data==None :
         check='None'
@@ -46,7 +46,7 @@ def home():
         data=val
      if len(data)>max_data:
          data=data[:max_data]
-     return render_template("home.html",sq=data,cols=tb_col,data=check, table_used=table().table__name__)
+     return render_template("home.html",sq=data, data=check, table_used=table().table__name__)
 
    if request.method=="POST":
      query=request.form['query']
@@ -55,19 +55,17 @@ def home():
 
      if splitted_query[1].startswith( "sql(" )  or  splitted_query[2].startswith( "join(" ) :
          result=eval(query)
-         tb_col=result['table'].table__columns__
-         tb_name=result['table'].table__name__
-         data=result['records']
+         tb_name=result[0].table__name__
+         data=result
      else:
-        tb_col=getattr(globals()['db'], splitted_query[1][:len(splitted_query[1])-2])().table__columns__
         tb_name=getattr(globals()['db'], splitted_query[1][:len(splitted_query[1])-2])().table__name__
         data=eval(query)
 
 
      check=""
-     if isinstance(data,tuple):
+     if isinstance(data, db.custom_tuple_write) or isinstance(data,db.custom_tuple_read):
         check='tuple'
-     elif isinstance(data,str) or isinstance(data,int) or isinstance(data,float):
+     elif isinstance(data,str) or isinstance(data,int) or isinstance(data,float) or isinstance(data, tuple):
         check='value'
      elif data==None :
         check='None'
@@ -82,4 +80,4 @@ def home():
 
      if len(data)>max_data:
          data=data[:max_data]
-     return  render_template("home.html",sq=data,qr=query,cols=tb_col, data=check, table_used=tb_name)
+     return  render_template("home.html",sq=data,qr=query, data=check, table_used=tb_name)
