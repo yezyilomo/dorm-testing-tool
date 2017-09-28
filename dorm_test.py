@@ -55,7 +55,10 @@ def home():
 
      if splitted_query[1].startswith( "sql(" )  or  splitted_query[2].startswith( "join(" ) :
          result=eval(query)
-         tb_name=result[0].table__name__
+         if isinstance(result, db.custom_tuple_write) or isinstance(result, db.custom_tuple_read):
+             tb_name=result[0].table__name__
+         else:
+             tb_name = "Intermediate"
          data=result
      else:
         tb_name=getattr(globals()['db'], splitted_query[1][:len(splitted_query[1])-2])().table__name__

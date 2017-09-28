@@ -14,4 +14,4 @@ class student(db.model):
 
 def run():
    course().create()
-   astudent().create()
+   student().create()

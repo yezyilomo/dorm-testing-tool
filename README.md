@@ -15,13 +15,21 @@ This is a simple user documentation, illustrating how to use dorm tool, dorm API
       and it has to be called at the beginning of config.py file
 
 
-2.get():
+2.get(col_name):
 
       This is a method which returns all records from a database as
 
-      a tuple of objects of records, it takes no arguments and it's called as
+      a tuple of objects of records if it takes no arguments, but if it's
 
-      db.table_name().get()
+      given a string argument it return a tuple of values in a specified column
+
+      name(argument), and it's called as
+
+      db.table_name().get()   or
+
+      db.table_name().get(col_name)   or
+
+      db.table_name().where('condition').get('col_name')  
 
 
 3.where(*data):
@@ -177,13 +185,37 @@ This is a simple user documentation, illustrating how to use dorm tool, dorm API
 
       db.table1_name().join(table2,'your_join_type')
 
-11.onwhere(on_condition, where_condition):
+11.on(*on_condition):
+
+      This is a method which does the actual joining and return records according
+
+      to the conditions specified in join condition, it accept two form of arguments,
+
+      the first form is a three arguments which form the join condition eg
+
+      db.table1().join(table2).on('table1.id','=','table2.id')
+
+      and the second form is a single string which Specify the whole condition eg
+
+      db.table1().join(table2).on('table1.id = table2.id')
+
+12.onwhere(on_condition, where_condition):
 
       This is a method which is used to query and return records from a table
 
       arose as a result of joining two tables, with arguments as 'ON' condition and
 
       'WHERE' condition, it returns a tuple of objects of record
+
+13.hash(string):
+
+      This is a method which is used to hash information(eg passwords) for
+
+      privacy purpose, it uses sha3 to hash and add some characters to the
+
+      hashed string for increasing security, it takes a string arguments to
+
+      be hashed and it returns hashed string
 
 
 # Table and Joined Table attributes
