@@ -145,30 +145,27 @@
         </div>
 
         <div class="data">
-          {% if data=='tuple' or data=='None' %}
+          {% if flag=='tuple' %}
           <p class="tb_name"> {{table_used}} Table</p>
           <table>
-            {% if sq %}
-            {% for hd in sq[0].table__columns__ %}
+            {% if data %}
+            {% for hd in data[0].table__columns__ %}
             <th>{{hd}}</th>
             {% endfor %}
             {% else %}
             <br>
             No records.
             {% endif %}
-            {% for rec in sq %}
+            {% for rec in data %}
             <tr>
-              {% for cl in sq[0].table__columns__ %}
+              {% for cl in data[0].table__columns__ %}
               <td> {{ get_rec_values(rec,cl) }}</td>
               {% endfor %}
             </tr>
             {% endfor %}
           </table>
-
-          {% elif data=='value' or data=='object' %}
-          <p>{{sq}}</p>
           {% else %}
-          <p>{{ sq }}</p>
+          <p>{{ data }}</p>
           {% endif %}
         </div>
       </div>
